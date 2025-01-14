@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style_registrar_carona.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <title>Registrar Carona</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstRGRzl0xLVnj50wCrCyZrwNhM1ZgplA&libraries=places"></script>
+</head>
+<body>
+    <div class="header">
+        <img src="img/Logo_VaiJuntoIF.png">
+        <div class="menu">
+            <a href="/" class="inicio">Início</a>
+            <a href="/minhas_reservas" class="minhas-reservas">Minhas Reservas</a>
+            
+            <div class="user-menu">
+                <i class="fas fa-user-circle fa-2x"></i>
+                <div class="dropdown">
+                    <% if (usuario) { %> <!-- Verifica se o usuário está logado -->
+                        <p>Bem-vindo, <%= usuario.name || 'Usuário' %>!</p> <!-- Exibe o nome do usuário -->
+                        <a href="/logout">Sair</a> <!-- Link para logout -->
+                    <% } else { %>
+                        <a href="/login">Entre</a>
+                        <a href="/cadastrar">Cadastre-se</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <h2>Dados da Viagem</h2>
+        <form action="/registrar_carona" method="POST">
+            <div class="search-box">
+                <div>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input id="origem" name="origem" placeholder="Saindo de" type="text" required class="pac-target-input" autocomplete="off">
+                </div>
+                <div>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input id="destino" name="destino" placeholder="Indo para" type="text" required class="pac-target-input" autocomplete="off">
+                </div>
+                <div>
+                    <i class="fas fa-calendar-alt"></i>
+                    <input name="data" type="date" required>
+                </div>
+                <div>
+                    <i class="fas fa-clock"></i>
+                    <input name="hora" type="time" required>
+                </div>
+                <div>
+                    <i class="fas fa-users"></i>
+                    <select name="numero_passageiros" required>
+                        <option value="" disabled selected>Número de passageiros</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+            </div>
+
+            <h2>Dados do Motorista</h2>
+            <div class="search-box">
+                <div>
+                    <i class="fas fa-user"></i>
+                    <input name="nome_motorista" placeholder="Nome do Motorista" type="text" required>
+                </div>
+                <div>
+                    <i class="fas fa-id-card "></i>
+                    <input name="cnh" placeholder="CNH" type="text" required>
+                </div>
+                <div>
+                    <i class="fab fa-whatsapp"></i>
+                    <input id="numero_telefone" name="numero_telefone" placeholder="Numero Telefone" type="text" required value="+55 (DDD) xxxxx-xxxx">
+                </div>
+            </div>
+
+            <h2>Dados do Veículo</h2>
+            <div class="search-box">
+                <div>
+                    <i class="fas fa-car"></i>
+                    <input name="tipo_carro" placeholder="Tipo do Carro" type="text" required>
+                </div>
+                <div>
+                    <i class="fas fa-car-side"></i> 
+                    <input name="modelo_veiculo" placeholder="Modelo do Veículo" type="text" required> 
+                </div>
+                <div>
+                    <i class="fas fa-palette"></i>
+                    <input name="cor_carro" placeholder="Cor" type="text" required>
+                </div>
+                <div>
+                    <i class="fas fa-id-badge"></i>
+                    <input name="placa" placeholder="Placa" type="text" required>
+                </div>
+            </div>
+
+            <!-- Botão Registrar -->
+            <div class="register-button-container">
+                <button type="submit">Registrar Carona</button>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 VaiJuntoIF. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        function initAutocomplete() {
+            var origemInput = document.getElementById('origem');
+            var destinoInput = document.getElementById('destino');
+            var defaultDestination = "IFRS - Campus Sertão";
+            var options = {
+                types: ['(cities)'],
+                componentRestrictions: { country: 'br' }
+            };
+    
+            var origemAutocomplete = new google.maps.places.Autocomplete(origemInput, options);
+            var destinoAutocomplete = new google.maps.places.Autocomplete(destinoInput, options);
+    
+            // Preencher automaticamente os campos
+            origemInput.addEventListener('input', function () {
+                if (origemInput.value.trim() !== "" && destinoInput.value.trim() === "") {
+                    destinoInput.value = defaultDestination;
+                }
+            });
+    
+            destinoInput.addEventListener('input', function () {
+                if (destinoInput.value.trim() !== "" && origemInput.value.trim() === "") {
+                    origemInput.value = defaultDestination;
+                }
+            });
+    
+            // Verifica se as cidades estão no RS
+            origemAutocomplete.addListener('place_changed', function () {
+                var place = origemAutocomplete.getPlace();
+                if (!place.address_components.some(component => component.short_name === 'RS')) {
+                    origemInput.value = '';
+                    alert('Por favor, selecione uma cidade no Rio Grande do Sul.');
+                }
+            });
+    
+            destinoAutocomplete.addListener('place_changed', function () {
+                var place = destinoAutocomplete.getPlace();
+                if (!place.address_components.some(component => component.short_name === 'RS')) {
+                    destinoInput.value = '';
+                    alert('Por favor, selecione uma cidade no Rio Grande do Sul.');
+                }
+            });
+        }
+    
+        google.maps.event.addDomListener(window, 'load', initAutocomplete);
+    
+        // Máscara de Telefone com DDD fixo
+        document.getElementById('numero_telefone').addEventListener('input', function (event) {
+            var valor = event.target.value;
+            // Remove todos os caracteres não numéricos
+            valor = valor.replace(/\D/g, '');
+    
+            // Mantém o código de área fixo "55" e formata o número
+            if (valor.length > 2) {
+                valor = '55 (' + valor.substring(2, 4) + ') ' + valor.substring(4, 9) + '-' + valor.substring(9, 13);
+            }
+    
+            event.target.value = valor;
+        });
+    </script>
+    
+</body>
+</html>

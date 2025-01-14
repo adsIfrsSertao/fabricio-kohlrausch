@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style_tela_login.css">
+  <title>Login</title>
+</head>
+<body>
+  <section class="c1">
+    <div class="right">
+      <div class="panel login">
+        <img id="logo" src="/img/Logo_VaiJuntoIF.png" alt="logo">
+
+        <h1>Entre na sua conta.</h1>
+        <br>
+
+        <div id="corpo-formu">
+
+          <!-- Mensagem de erro -->
+          <div id="error-message" style="color: red;">
+            <% if (error) { %>
+                <p>Email ou senha incorretos. Tente novamente.</p>
+            <% } %>
+          </div>
+
+          <form method="post" action="/login">
+            <div class="divider">
+              <div class="line"></div>
+            </div>
+            <br>
+            
+            <input class="input-box" id="email" type="email" name="email" placeholder="Email" autocomplete="off" required>
+            <input class="input-box" type="password" name="senha" placeholder="Senha" id="senha" required>
+            <button class="button" id="btn" type="submit">Entrar</button><br>
+
+            <p class="alternative-text">Ou fazer</p>
+          </form>
+
+          <!-- Botão de login com Google -->
+          <a href="/auth/google" class="google-btn">
+            <i class="fab fa-google"></i> Login com Google
+          </a>
+        </div>
+      </div>
+
+      <div class="panel signup">
+        <p>Não tem uma conta?</p>
+        <a href="/cadastrar">Cadastre-se</a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

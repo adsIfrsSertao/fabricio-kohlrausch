@@ -1,0 +1,208 @@
+<!DOCTYPE html>  
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaiJuntoIF - Caronas Disponíveis</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/style_carona-disponiveis.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstRGRzl0xLVnj50wCrCyZrwNhM1ZgplA&libraries=places"></script>
+</head>
+<body>
+<header>
+    <div class="header">
+        <img src="/img/Logo_VaiJuntoIF.png" alt="Logo VaiJuntoIF">
+        <div class="menu">
+            <a href="/">Início</a>
+            <a href="/minhas_reservas">Minhas Reservas</a>
+            <a id="offer-ride-btn" href="javascript:void(0);">
+                <i class="fas fa-plus"></i> Oferecer carona
+            </a>
+            <div class="user-menu">
+                <i class="fas fa-user-circle fa-2x"></i>
+                <div class="dropdown">
+                    <% if (usuario) { %> <!-- Verifica se o usuário está logado -->
+                        <p>Bem-vindo, <%= usuario.name || 'Usuário' %>!</p> <!-- Exibe o nome do usuário ou "Usuário" -->
+                        <a href="/logout">Sair</a> <!-- Link para logout -->
+                    <% } else { %>
+                        <a href="/login">Entre</a>
+                        <a href="/cadastrar"> Cadastre-se </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="search-container">
+    <h1>Para onde você quer ir?</h1>
+    <div class="search-box">
+        <div>
+            <i class="fas fa-map-marker-alt"></i>
+            <input id="from" placeholder="Saindo de" type="text" class="pac-target-input" autocomplete="off">
+        </div>
+        <div>
+            <i class="fas fa-map-marker-alt"></i>
+            <input id="to" placeholder="Indo para" type="text" class="pac-target-input" autocomplete="off">
+        </div>
+        <div>
+            <i class="fas fa-calendar-alt"></i>
+            <input id="data" placeholder="Data" type="date">
+        </div>
+        <button id="search-btn">Procurar</button>
+    </div>
+</div>
+<main>
+    <h2>Caronas Disponíveis</h2>
+    <% if (Array.isArray(caronas) && caronas.length > 0) { %>
+        <% caronas.forEach(carona => { %>
+            <div class="carona-info">
+                <div class="info-row">
+                    <span class="label">Origem:</span>
+                    <span class="value"><%= carona.origem %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Destino:</span>
+                    <span class="value"><%= carona.destino %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Data:</span>
+                    <span class="value"><%= new Date(new Date(carona.data).setDate(new Date(carona.data).getDate() + 1)).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Hora:</span>
+                    <span class="value">
+                        <%= carona.hora ? carona.hora.slice(0, 5) : 'Hora não definida' %>
+                    </span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="label">Nome Motorista:</span>
+                    <span class="value"><%= carona.motorista.nome_motorista %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">CNH Motorista:</span>
+                    <span class="value"><%= carona.motorista.cnh %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Modelo Veículo:</span>
+                    <span class="value"><%= carona.veiculo.modelo_veiculo %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Tipo Veículo:</span>
+                    <span class="value"><%= carona.veiculo.tipo_carro %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Cor Veículo:</span>
+                    <span class="value"><%= carona.veiculo.cor_carro %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Placa Veículo:</span>
+                    <span class="value"><%= carona.veiculo.placa %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Número de Passageiros:</span>
+                    <span class="value"><%= carona.numero_passageiros %></span>
+                </div>
+                <hr>
+                <button id="reserve-btn" onclick="reservarCarona(<%= carona.id %>, <%= carona.numero_passageiros %>)">Reservar Carona</button>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p class="nenhuma-reserva">Nenhuma reserva encontrada.</p>
+    <% } %>
+</main>
+<footer>
+    <p>&copy; 2024 VaiJuntoIF. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+    function reservarCarona(caronaId, numeroPassageiros) {
+        if (numeroPassageiros === 0) {
+            alert('Número de passageiros esgotado. Não há vagas disponíveis para essa carona.');
+            return;
+        }
+
+        fetch('/reservar_carona', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ caronaId: caronaId })
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            }
+        })
+        .catch(error => console.error('Erro ao reservar carona:', error));
+    }
+
+    function initAutocomplete() {
+        const fromInput = document.getElementById('from');
+        const toInput = document.getElementById('to');
+        const defaultDestination = "IFRS - Campus Sertão";
+
+        // Configuração do Autocomplete do Google Maps
+        const options = {
+            types: ['(cities)'],
+            componentRestrictions: { country: 'br' }
+        };
+
+        const fromAutocomplete = new google.maps.places.Autocomplete(fromInput, options);
+        const toAutocomplete = new google.maps.places.Autocomplete(toInput, options);
+
+        // Preencher automaticamente os campos
+        fromInput.addEventListener('input', () => {
+            if (fromInput.value.trim() !== "" && toInput.value.trim() === "") {
+                toInput.value = defaultDestination;
+            }
+        });
+
+        toInput.addEventListener('input', () => {
+            if (toInput.value.trim() !== "" && fromInput.value.trim() === "") {
+                fromInput.value = defaultDestination;
+            }
+        });
+
+        // Restrição para cidades no RS
+        fromAutocomplete.addListener('place_changed', () => {
+            const place = fromAutocomplete.getPlace();
+            if (!place.address_components.some(component => component.short_name === 'RS')) {
+                fromInput.value = '';
+                alert('Por favor, selecione uma cidade no Rio Grande do Sul.');
+            }
+        });
+
+        toAutocomplete.addListener('place_changed', () => {
+            const place = toAutocomplete.getPlace();
+            if (!place.address_components.some(component => component.short_name === 'RS')) {
+                toInput.value = '';
+                alert('Por favor, selecione uma cidade no Rio Grande do Sul.');
+            }
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initAutocomplete);
+
+    document.getElementById('offer-ride-btn').addEventListener('click', function() {
+        window.location.href = '/registrar_carona';
+    });
+
+    document.getElementById('search-btn').addEventListener('click', function() {
+        const from = document.getElementById('from').value;
+        const to = document.getElementById('to').value;
+        const date = document.getElementById('data').value;
+
+        const queryParams = [];
+        if (from) queryParams.push(`from=${encodeURIComponent(from)}`);
+        if (to) queryParams.push(`to=${encodeURIComponent(to)}`);
+        if (date) queryParams.push(`data=${encodeURIComponent(date)}`);
+
+        const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+        window.location.href = `/caronas-disponiveis${queryString}`;
+    });
+</script>
+
+</body>
+</html>

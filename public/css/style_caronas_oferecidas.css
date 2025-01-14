@@ -1,0 +1,397 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column; /* Permite o uso do footer fixo ao final */
+    min-height: 100vh; /* Garante que o body ocupe toda a altura da viewport */
+}
+main {
+    flex: 1; /* Faz com que o conteúdo principal ocupe o espaço disponível */
+    padding: 20px;
+    margin-bottom: 60px; /* Garante espaço extra para o rodapé */
+}
+
+main {
+    margin-bottom: 60px; /* Para garantir espaço entre o conteúdo e o rodapé */
+}
+.header {
+    background-color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e0e0;
+}
+.header img {
+    height: 100px;
+}
+.header .menu {
+    display: flex;
+    align-items: center;
+}
+.header .menu a {
+    color: #008000;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 16px;
+}
+.header .menu a:hover {
+    text-decoration: underline;
+}
+.header .user-menu {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px; /* Espaço entre "Oferecer carona" e ícone de login */
+}
+.header .user-menu .dropdown {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+.header .user-menu:hover .dropdown {
+    display: block;
+}
+.header .user-menu .dropdown a {
+    color: black;
+    text-decoration: none;
+    display: block;
+    margin: 5px 0;
+}
+.header .user-menu .dropdown a:hover {
+    text-decoration: underline;
+}
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+.reservation-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin-bottom: 20px;
+}
+.reservation-card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.reservation-card .info-row {
+    margin: 5px 0;
+}
+.reservation-card .info-row .label {
+    font-weight: bold;
+    color: #008000;
+}
+.reservation-card .info-row .value {
+    color: #333;
+}
+.reservation-card .buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.reservation-card .buttons button {
+    background-color: #008000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 150px; /* Reduz a largura do botão */
+}
+.reservation-card .buttons button:hover {
+    background-color: #006400;
+}
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: white; 
+    position: relative; /* Para evitar sobreposição */
+    left: 0; /* Alinha à esquerda */
+    bottom: 0; /* Alinha ao fundo */
+    width: 100%; /* Faz o rodapé ocupar toda a largura */
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+footer p {
+    margin: 0;
+    color: #000; /* Cor do texto em preto */
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column; /* Permite o uso do footer fixo ao final */
+    min-height: 100vh; /* Garante que o body ocupe toda a altura da viewport */
+}
+main {
+    flex: 1; /* Faz com que o conteúdo principal ocupe o espaço disponível */
+    padding: 20px;
+    margin-bottom: 60px; /* Garante espaço extra para o rodapé */
+}
+
+.nenhuma-reserva {
+    text-align: center; /* Centraliza o texto horizontalmente */
+    margin-top: 20px; /* Adiciona espaço acima do parágrafo */
+    font-size: 18px; /* Ajusta o tamanho da fonte */
+    color: #333; /* Cor do texto */
+}
+
+.header {
+    background-color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header img {
+    height: 100px;
+}
+
+.header .menu {
+    display: flex;
+    align-items: center;
+}
+
+.header .menu a {
+    margin-left: 20px;
+    color: #28a745; /* Green color for "Oferecer carona" */
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.header .menu a i {
+    margin-right: 5px; /* Space between icon and text */
+}
+
+.header .menu .user-menu {
+    position: relative;
+    margin-left: 20px; /* Space between "Oferecer carona" and user icon */
+}
+
+.header .menu .user-menu .dropdown {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.header .menu .user-menu .dropdown a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+}
+
+.header .menu .user-menu .dropdown a:hover {
+    background-color: #f5f5f5;
+}
+
+.header .menu .user-menu:hover .dropdown {
+    display: block;
+}
+
+.search-container {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.search-container h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    border-radius: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+
+.search-box div {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-box div i {
+    margin-right: 10px; /* Increased space between icon and input */
+    color: #28a745; /* Green color for icons */
+}
+
+.search-box input,
+.search-box select {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 10px; /* Adding padding for better input appearance */
+}
+
+.search-box button {
+    background-color: #28a745; /* Strong green color for button */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 50px; /* Ajuste para afastar o botão de procurar da data */
+}
+
+.search-box button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+main {
+    padding: 20px;
+}
+
+main h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center; /* Centraliza o texto */
+}
+
+/* Estilos para as informações da carona */
+.carona-info {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px auto;
+    padding: 15px;
+    max-width: 600px;
+}
+
+.carona-info .info-row {
+    margin: 5px 0; /* Margem entre as linhas de informação */
+}
+
+.carona-info .label {
+    color: #28a745; /* Cor verde para os rótulos */
+    font-weight: bold; /* Deixa o texto em negrito */
+}
+
+.carona-info .value {
+    color: #000; /* Cor preta para os valores */
+}
+
+/* Botão Reservar Carona */
+button#reserve-btn {
+    background-color: #28a745; /* Cor verde para o botão */
+    color: white;
+    border: none;
+    padding: 8px 16px; /* Ajuste o padding para diminuir o tamanho */
+    border-radius: 20px; /* Bordas arredondadas */
+    cursor: pointer;
+    display: block; /* Para centralizar */
+    margin: 10px auto; /* Margem automática para centralizar */
+    width: 150px; /* Largura reduzida */
+}
+
+button#reserve-btn:hover {
+    background-color: #218838; /* Cor mais escura ao passar o mouse */
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 15px 0;
+}
+
+/* Espaço adicional acima do rodapé */
+main {
+    margin-bottom: 60px; /* Para garantir espaço entre o conteúdo e o rodapé */
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: white; 
+    position: relative; /* Para evitar sobreposição */
+    left: 0; /* Alinha à esquerda */
+    bottom: 0; /* Alinha ao fundo */
+    width: 100%; /* Faz o rodapé ocupar toda a largura */
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+footer p {
+    margin: 0;
+    color: #000; /* Cor do texto em preto */
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 768px) {
+    .header .menu a {
+        font-size: 14px;
+    }
+
+    .header .menu .user-menu .dropdown a {
+        font-size: 14px;
+    }
+
+    .search-container h1 {
+        font-size: 28px;
+    }
+
+    .search-box {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .search-box div {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .search-box button {
+        width: 100%; /* Faz o botão ocupar toda a largura disponível */
+        margin-left: 0; /* Remove a margem para telas menores */
+        margin-top: 10px; /* Adiciona um pouco de espaço acima */
+    }
+
+    main h2 {
+        font-size: 24px;
+    }
+
+    .carona-info {
+        max-width: 90%; /* Largura adaptável em telas menores */
+    }
+
+    button#reserve-btn {
+        background-color: #28a745; /* Cor verde */
+        color: white; /* Cor do texto */
+        border: none; /* Remove bordas */
+        padding: 10px 20px; /* Ajusta o tamanho do botão */
+        border-radius: 25px; /* Torna os cantos arredondados */
+        font-size: 16px; /* Tamanho do texto */
+        cursor: pointer; /* Muda o cursor ao passar o mouse */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
+        transition: background-color 0.3s ease; /* Suaviza o hover */
+    }
+    
+    button#reserve-btn:hover {
+        background-color: #218838; /* Tom de verde mais escuro ao passar o mouse */
+    }
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VaiJuntoIF</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/style_index.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCstRGRzl0xLVnj50wCrCyZrwNhM1ZgplA&libraries=places"></script>
+</head>
+<body>
+
+  <div class="header">
+    <img src="img/Logo_VaiJuntoIF.png" alt="Logo VaiJuntoIF">
+    <div class="menu">
+      <a id="offer-ride-btn">
+        <i class="fas fa-plus"></i>
+        Oferecer carona
+      </a>
+      <a href="/minhas_reservas">Minhas Reservas</a>
+      <a href="/caronas_oferecidas">Caronas Oferecidas</a>
+      <div class="user-menu">
+        <i class="fas fa-user-circle fa-2x"></i>
+        <div class="dropdown">
+          <% if (usuario) { %>
+              <p>Bem-vindo, <%= usuario.name %>!</p>
+              <a href="/logout">Sair</a>
+          <% } else { %>
+              <a href="/login">Entre</a>
+              <a href="/cadastrar"> Cadastre-se </a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <h1>Para onde você quer ir?</h1>
+    <div class="search-box">
+      <div>
+        <i class="fas fa-map-marker-alt"></i>
+        <input id="from" placeholder="Saindo de" type="text" class="pac-target-input" autocomplete="off">
+      </div>
+      <div>
+        <i class="fas fa-map-marker-alt"></i>
+        <input id="to" placeholder="Indo para" type="text" class="pac-target-input" autocomplete="off">
+      </div>
+      <div>
+        <i class="fas fa-calendar-alt"></i>
+        <input id="date-input" placeholder="Hoje" type="date">
+      </div>
+      <button id="search-btn" class="search-button">Procurar</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="feature">
+      <i class="fas fa-car"></i>
+      <h3>Viagens para você!</h3>
+      <p>Não importa para onde você vai, de ônibus ou de carona, encontre a viagem perfeita entre nossos vários destinos e trajetos.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-user-check"></i>
+      <h3>Confie em quem viaja com você!</h3>
+      <p>Para nós, é muito importante conhecer cada um dos nossos membros e parceiros. Conferimos os perfis e documentações, assim você sempre sabe com quem vai viajar e pode reservar sua viagem com tranquilidade e segurança na nossa plataforma.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-bolt"></i>
+      <h3>Procure, clique e viaje!</h3>
+      <p>Reservar uma viagem nunca foi tão fácil! Graças à nossa tecnologia e à simplicidade, você reserva sua viagem em poucos minutos.</p>
+    </div>
+  </div>
+
+  <div class="safety-section">
+    <img alt="Two people smiling in a car with a safety icon overlay" height="150" src="https://storage.googleapis.com/a1aa/image/jUelIzDRkgUCGa8kS6Yi6tHjbl1qfnerk0q7euPajPGqC9MPB.jpg" width="150"/>
+    <div class="text">
+      <h2>Sua segurança. Nossa prioridade.</h2>
+      <p>No VaiJuntoIF, estamos dedicados a construir uma comunidade confiável de caronas em todo o ambiente acadêmico do IFRS - Campus Sertão. Acesse nosso Site para explorar a gama de recursos que você pode utilizar para sentir mais segurança em sua próxima carona.</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2024 VaiJuntoIF. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script> 
+    function initAutocomplete() {
+        var fromInput = document.getElementById('from');
+        var toInput = document.getElementById('to');
+        var options = {
+            types: ['(cities)'],
+            componentRestrictions: { country: 'br' }
+        };
+
+        var fromAutocomplete = new google.maps.places.Autocomplete(fromInput, options);
+        var toAutocomplete = new google.maps.places.Autocomplete(toInput, options);
+
+        fromAutocomplete.addListener('place_changed', function () {
+            var place = fromAutocomplete.getPlace();
+            if (!place.address_components.some(component => component.short_name === 'RS')) {
+                fromInput.value = '';
+                alert('Por favor, selecione uma cidade no Rio Grande do Sul.');
+            } else {
+                // Preenche automaticamente o campo "Indo para" caso esteja vazio
+                if (!toInput.value) {
+                    toInput.value = 'IFRS - Campus Sertão';
+                }
+            }
+        });
+
+        toAutocomplete.addListener('place_changed', function () {
+            var place = toAutocomplete.getPlace();
+            if (!place.address_components.some(component => component.short_name === 'RS')) {
+                toInput.value = '';
+                alert('Por favor, selecione uma cidade no Rio Grande do Sul.');
+            } else {
+                // Preenche automaticamente o campo "Saindo de" caso esteja vazio
+                if (!fromInput.value) {
+                    fromInput.value = 'IFRS - Campus Sertão';
+                }
+            }
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initAutocomplete);
+
+    document.getElementById('offer-ride-btn').addEventListener('click', function () {
+        window.location.href = '/registrar_carona';
+    });
+
+    document.getElementById('search-btn').addEventListener('click', function () {
+        const from = document.getElementById('from').value;
+        const to = document.getElementById('to').value;
+        const date = document.getElementById('date-input').value;
+
+        let url = `/caronas-disponiveis`;
+        const params = [];
+        if (date) params.push(`data=${date}`);
+        if (from) params.push(`from=${from}`);
+        if (to) params.push(`to=${to}`);
+        if (params.length > 0) url += `?${params.join('&')}`;
+
+        window.location.href = url;
+    });
+</script>
+
+</body>
+</html>

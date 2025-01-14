@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style_tela_cadastro.css">
+  <title>Cadastro</title>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+    <div class="right">
+      <div class="panel login">
+        <img id="logo" src="/img/Logo_VaiJuntoIF.png" alt="logo">
+        <l_1>
+            Cadastre-se utilizando o seu Email Institucional.
+    
+        </l_1>
+        <br>
+         
+
+<div id="corpo-formu">
+  <form method="POST" action="/salvarcadastro">
+    <div class="divider">
+      <div class="line"></div>
+    </div>
+
+      <h1><i class="fab fa-php"></i></h1><br>
+      <input class="input-box"  type="text" name="nome" placeholder="Nome" autocomplete="off" id="nome">
+
+      <input  class="input-box" type="email" name="email" placeholder="Email" autocomplete="off" id="email" onclick="erro()">
+
+      <input class="input-box" type="text" name="cpf" placeholder="CPF" id="cpf">
+
+   
+
+      <input class="input-box" type="password" name="senha" placeholder="Senha" id="senha">
+
+      <input class="input-box" type="password" name="confisenha" placeholder="Confirmar Senha" id="confisenha"><br>
+
+    
+  
+      <button class="button">Cadastrar</button><br>
+
+  
+      <!-- <span class="erro"><i class="fa fa-exclamation-triangle"></i> Cadastro Incompleto</span> -->
+
+      
+      
+    </form>
+  </div>
+</div>
+
+<div class="panel signup">
+  <p>Tem uma conta ?</p>
+  <a href="/login">Conecte-se</a>
+</div>
+  </div>
+  
+</body>
+</html>

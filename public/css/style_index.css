@@ -1,0 +1,306 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header img {
+  height: 100px;
+}
+
+.header .menu {
+  display: flex;
+  align-items: center;
+}
+
+.header .menu a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+}
+
+.header .menu a#offer-ride-btn {
+  background-color: white;
+  color: #28a745;
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #28a745;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header .menu a#offer-ride-btn i {
+  margin-right: 5px;
+}
+
+.header .menu a#offer-ride-btn:hover {
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+}
+
+.header .menu a[href="/minhas_reservas"],
+.header .menu a[href="/caronas_oferecidas"] {
+  color: #28a745;
+}
+
+.header .user-menu {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.header .user-menu i {
+  margin-left: 20px;
+}
+
+.header .user-menu .dropdown {
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header .user-menu:hover .dropdown {
+  display: block;
+}
+
+.search-container {
+  text-align: center;
+  padding: 40px 20px;
+  flex: 1;
+}
+
+.search-container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.search-box {
+  background-color: white;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  width: 80%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.search-box div {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.search-box div:first-child {
+  margin-left: 60px;
+}
+
+.search-box div:last-child {
+  margin-right: 0;
+}
+
+.search-box i {
+  color: #28a745;
+  margin-right: 10px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.search-box .date-input {
+  width: 100px;
+}
+
+.search-box .search-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 30px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 120px;
+}
+
+.content {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.content .feature {
+  display: inline-block;
+  width: 30%;
+  padding: 20px;
+  vertical-align: top;
+}
+
+.content .feature i {
+  font-size: 40px;
+  color: #28a745;
+}
+
+.content .feature h3 {
+  color: #28a745;
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.content .feature p {
+  color: #333;
+  font-size: 14px;
+}
+
+.safety-section {
+  background-color: #a0d468;
+  color: black;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.safety-section img {
+  border-radius: 10px;
+  margin-right: 40px;
+}
+
+.safety-section .text {
+  max-width: 500px;
+}
+
+.safety-section .text h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.safety-section .text p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: white;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+footer p {
+  margin: 0;
+  color: #000;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header img {
+    height: 60px;
+  }
+
+  .header .menu {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header .menu a {
+    margin: 10px 0;
+  }
+
+  .search-box {
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .search-box div {
+    margin: 10px 0;
+  }
+
+  .search-box .search-button {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .content .feature {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .safety-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .safety-section img {
+    margin-right: 0;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .header .menu {
+    align-items: flex-start;
+  }
+
+  .search-container h1 {
+    font-size: 18px;
+  }
+
+  .search-box input {
+    font-size: 14px;
+  }
+
+  .search-box .search-button {
+    font-size: 14px;
+  }
+
+  .safety-section .text h2 {
+    font-size: 20px;
+  }
+
+  .safety-section .text p {
+    font-size: 14px;
+  }
+
+  footer {
+    font-size: 12px;
+  }
+}
+

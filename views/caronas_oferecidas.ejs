@@ -1,0 +1,150 @@
+<html lang="pt-BR"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaiJuntoIF - Caronas Oferecidas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/style_caronas_oferecidas.css">
+</head>
+<body>
+<header>
+    <div class="header">
+        <img src="/img/Logo_VaiJuntoIF.png" alt="Logo VaiJuntoIF">
+        <div class="menu">
+            <a href="/">Início</a>
+            <a id="offer-ride-btn" href="javascript:void(0);">
+                <i class="fas fa-plus"></i> Oferecer carona
+            </a>
+            <div class="user-menu">
+                <i class="fas fa-user-circle fa-2x"></i>
+                <div class="dropdown">
+                    <% if (usuario) { %> <!-- Verifica se o usuário está logado -->
+                        <p>Bem-vindo, <%= usuario.name || 'Usuário' %>!</p> <!-- Exibe o nome do usuário ou "Usuário" -->
+                        <a href="/logout">Sair</a> <!-- Link para logout -->
+                    <% } else { %>
+                        <a href="/login">Entre</a>
+                        <a href="/cadastrar"> Cadastre-se </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h2>Caronas Oferecidas</h2>
+    <div id="status-message" style="display:none; padding: 10px; border-radius: 5px; margin-bottom: 20px;"></div>
+    <% caronas.forEach(carona => { %>
+        <div class="reservation-card" id="carona-<%= carona.id %>">
+            <div class="info-row">
+                <span class="label">Origem:</span>
+                <span class="value"><%= carona.origem %></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Destino:</span>
+                <span class="value"><%= carona.destino %></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Data:</span>
+                <span class="value"><%= new Date(new Date(carona.data).setDate(new Date(carona.data).getDate() + 1)).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) %></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Hora:</span>
+                <span class="value">
+                    <%= carona.hora ? carona.hora.slice(0, 5) : 'Hora não definida' %>
+                </span>
+            </div>
+            <div class="info-row">
+                <span class="label">Nome Motorista:</span>
+                <span class="value"><%= carona.motorista.nome_motorista %></span>
+            </div>
+            <div class="info-row">
+                <span class="label">CNH Motorista:</span>
+                <span class="value"><%= carona.motorista.cnh %></span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Modelo Veículo:</span>
+                <span class="value"><%= carona.veiculo.modelo_veiculo %></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Tipo Veículo:</span>
+                <span class="value"><%= carona.veiculo.tipo_carro %></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Cor Veículo:</span>
+                <span class="value"><%= carona.veiculo.cor_carro %></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Placa Veículo:</span>
+                <span class="value"><%= carona.veiculo.placa %></span>
+            </div>
+            <div class="info-row">
+                <span class="label">Número de Passageiros:</span>
+                <span class="value"><%= carona.numero_passageiros %></span>
+            </div>
+            <div class="buttons">
+                <button id="reserve-btn" type="button" class="btn-cancelar" data-id="<%= carona.id %>">Cancelar Carona</button>
+            </div>
+        </div>
+        <hr>
+    <% }); %>
+</main>
+
+<script>
+    // Função para exibir a mensagem de log de erro
+    function showStatusMessage(message, isError = false) {
+        const statusMessage = document.getElementById('status-message');
+        statusMessage.textContent = message;
+        statusMessage.style.display = 'block';
+        statusMessage.style.backgroundColor = isError ? '#f8d7da' : '#d4edda'; // Cor de erro ou sucesso
+        statusMessage.style.color = isError ? '#721c24' : '#155724'; // Cor do texto para erro ou sucesso
+        statusMessage.style.border = isError ? '1px solid #f5c6cb' : '1px solid #c3e6cb'; // Cor da borda para erro ou sucesso
+
+        // Ocultar a mensagem após 5 segundos
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+        }, 5000);
+    }
+
+    // Função para enviar a requisição de exclusão da carona
+document.querySelectorAll('.btn-cancelar').forEach(button => {
+    button.addEventListener('click', async (event) => {
+        const caronaId = event.target.dataset.id;  // Captura o id da carona
+        console.log(`Excluindo carona com ID: ${caronaId}`);
+
+        try {
+            // Enviar a requisição para o backend para excluir a carona
+            const response = await fetch(`/excluir_carona/${caronaId}`, {  // Rota ajustada para excluir do banco de dados
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Remover a carona da tela
+                const reservaDiv = document.getElementById(`carona-${caronaId}`);
+                reservaDiv.remove();
+
+                // Exibir a mensagem de sucesso
+                showStatusMessage('Carona excluída com sucesso.');
+            } else {
+                // Exibir a mensagem de erro
+                showStatusMessage(result.error || 'Erro ao excluir a carona.', true);
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            showStatusMessage('Erro ao excluir a carona.', true);
+        }
+    });
+});
+</script>
+
+<footer>
+    <p>&copy; 2024 VaiJuntoIF. Todos os direitos reservados.</p>
+</footer>
+</body>
+</html>

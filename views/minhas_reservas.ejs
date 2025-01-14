@@ -1,0 +1,182 @@
+<!DOCTYPE html> 
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaiJuntoIF - Minhas Reservas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/style_minhas_reservas.css">
+</head>
+<body>
+<header>
+    <div class="header">
+        <img src="/img/Logo_VaiJuntoIF.png" alt="Logo VaiJuntoIF">
+        <div class="menu">
+            <a href="/">Início</a>
+            <a id="offer-ride-btn" href="javascript:void(0);">
+                <i class="fas fa-plus"></i> Oferecer carona
+            </a>
+            <div class="user-menu">
+                <i class="fas fa-user-circle fa-2x"></i>
+                <div class="dropdown">
+                    <% if (usuario) { %>
+                        <p>Bem-vindo, <%= usuario.name || 'Usuário' %>!</p>
+                        <a href="/logout">Sair</a>
+                    <% } else { %>
+                        <a href="/login">Entre</a>
+                        <a href="/cadastrar"> Cadastre-se </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h2>Minhas Reservas</h2>
+
+    <div id="status-message" style="display:none; padding: 10px; border-radius: 5px; margin-bottom: 20px;"></div>
+
+    <% if (reservas && reservas.length > 0) { %>
+        <% reservas.forEach(reserva => { %>
+            <div class="reserva-info" id="reserva-<%= reserva.carona.id %>">
+                <div class="info-row">
+                    <span class="label">Origem:</span>
+                    <span class="value"><%= reserva.carona.origem %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Destino:</span>
+                    <span class="value"><%= reserva.carona.destino %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Data:</span>
+                    <span class="value"><%= new Date(new Date(reserva.carona.data).setDate(new Date(reserva.carona.data).getDate() + 1)).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Hora:</span>
+                    <span class="value">
+                        <%= reserva.carona && reserva.carona.hora ? reserva.carona.hora.slice(0, 5) : 'Hora não definida' %>
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Nome Motorista:</span>
+                    <span class="value"><%= reserva.carona.motorista.nome_motorista %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">CNH Motorista:</span>
+                    <span class="value"><%= reserva.carona.motorista.cnh %></span>
+                </div>
+               
+                <div class="info-row">
+                    <span class="label">Modelo Veículo:</span>
+                    <span class="value"><%= reserva.carona.veiculo.modelo_veiculo %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Tipo Veículo:</span>
+                    <span class="value"><%= reserva.carona.veiculo.tipo_carro %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Cor Veículo:</span>
+                    <span class="value"><%= reserva.carona.veiculo.cor_carro %></span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Placa Veículo:</span>
+                    <span class="value"><%= reserva.carona.veiculo.placa %></span>
+                </div>
+
+                <div class="action-buttons">
+                    <!-- Botão de Cancelar Carona -->
+                    <button id="reserve-btn" type="button" class="btn-cancelar" data-id="<%= reserva.carona.id %>">Cancelar Carona</button>
+
+                    <!-- Botão WhatsApp -->
+                    <button type="button" class="btn-whatsapp" data-motorista-id="<%= reserva.carona.motorista.id %>">
+                        <i class="fab fa-whatsapp"></i> Conversar através do WhatsApp
+                    </button>
+                </div>
+
+                <hr>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p class="nenhuma-reserva">Nenhuma reserva encontrada.</p>
+    <% } %>
+</main>
+
+<footer>
+    <p>&copy; 2024 VaiJuntoIF. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+    function showStatusMessage(message, isError = false) {
+        const statusMessage = document.getElementById('status-message');
+        statusMessage.textContent = message;
+        statusMessage.style.display = 'block';
+        statusMessage.style.backgroundColor = isError ? '#f8d7da' : '#d4edda';
+        statusMessage.style.color = isError ? '#721c24' : '#155724';
+        statusMessage.style.border = isError ? '1px solid #f5c6cb' : '1px solid #c3e6cb';
+
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+        }, 5000);
+    }
+
+    // Função para limpar o número de caracteres indesejados
+    function formatPhoneNumber(phone) {
+        return phone.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    }
+
+    // Função para buscar o número do motorista e abrir o WhatsApp
+    document.querySelectorAll('.btn-whatsapp').forEach(button => {
+        button.addEventListener('click', async () => {
+            const motoristaId = button.getAttribute('data-motorista-id');
+            try {
+                const response = await fetch(`/api/motoristas/${motoristaId}`);
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar o número do motorista.');
+                }
+                const data = await response.json();
+                const whatsappNumber = formatPhoneNumber(data.numero_telefone); // Formata o número
+
+                const message = encodeURIComponent('Olá, gostaria de falar sobre a carona!');
+                const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
+
+                window.open(whatsappURL, '_blank');
+            } catch (error) {
+                console.error(error);
+                alert('Erro ao buscar o número do motorista.');
+            }
+        });
+    });
+
+    // Função para cancelar a carona
+    document.querySelectorAll('.btn-cancelar').forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const caronaId = event.target.dataset.id;
+
+            try {
+                const response = await fetch(`/cancelar_carona/${caronaId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    const reservaDiv = document.getElementById(`reserva-${caronaId}`);
+                    reservaDiv.remove();
+
+                    showStatusMessage('Carona cancelada com sucesso.');
+                } else {
+                    showStatusMessage(result.error || 'Erro ao cancelar a carona.', true);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showStatusMessage('Erro ao cancelar a carona.', true);
+            }
+        });
+    });
+</script>
+</body>
+</html>
